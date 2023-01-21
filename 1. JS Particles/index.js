@@ -25,17 +25,30 @@ ctx.fill();
 
 let atoms = [];
 
-canvas.addEventListener('click', function (e) {
-    for (let i = 0; i < 20; i++) {
-        atoms.push(new Atom(e.x, e.y));
-    }
-})
+// canvas.addEventListener('mousemove', function (e) {
+//     for (let i = 0; i < 20; i++) {
+//         atoms.push(new Atom(e.x, e.y));
+//     }
+// })
 
 const animate = () => {
-    atoms.forEach(atom => {
+    atoms.forEach((atom,index) => {
+        ctx.fillStyle = 'white';
         atom.draw();
-        atom.update();
+        atom.updateSpeed();
+        atom.updateSize();
+
+        if(atom.radius < 0.3){
+            atoms.splice(index, 1);
+        }
     })
+    //slowls adds rectangles with alpha value of 0.2 to cover atoms to fade them out
+    ctx.save();
+    //ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+
     requestAnimationFrame(animate);
 }
 
@@ -45,14 +58,18 @@ class Atom{
     constructor(x,y){
         this.x = x; 
         this.y = y;
-        this.radius = Math.random() * 10 + 2;
+        this.radius = Math.random() * 2 + 2;
         this.speedX = Math.random() * 4 - 2;
         this.speedY = Math.random() * 4 - 2;
     }
 
-    update(){
+    updateSpeed(){
         this.x += this.speedX;
         this.y += this.speedY;
+    }
+
+    updateSize(){
+        this.radius -= 0.1;
     }
 
     draw(){
@@ -61,3 +78,10 @@ class Atom{
         ctx.fill();
     }
 }
+
+const generateAtoms = () => {
+    atoms.push(new Atom(Math.random() * canvas.width, Math.random() * canvas.height));
+    requestAnimationFrame(generateAtoms);
+}
+
+generateAtoms();
