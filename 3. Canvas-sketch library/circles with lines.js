@@ -1,5 +1,5 @@
-//CLI: canvas-sketch sketch.js
-//npm: npx canvas-sketch-cli sketch.js --open
+//CLI: canvas-sketch circles with lines.js
+//npm: npx canvas-sketch-cli circles with lines.js --open
 
 const canvasSketch = require('canvas-sketch');
 
@@ -18,8 +18,26 @@ const sketch = () => {
     context.fillRect(0, 0, width, height);
 
     context.fillStyle = 'black';
-    context.lineWidth = 8;
+    context.lineWidth = 1;
 
+    for(let i = 0; i < circles.length; i++){
+      const circle1 = circles[i];
+      for(let j = i + 1; j < circles.length; j++){
+        const circle2 = circles[j];
+
+        const dist = getDistance(circle1.x, circle2.x, circle1.y, circle2.y);
+        
+        if (dist < 250){ 
+        context.lineWidth = 10 - dist/25;
+        context.beginPath();
+        context.moveTo(circle1.x, circle1.y);
+        context.lineTo(circle2.x, circle2.y);
+        context.stroke();
+        }
+      }
+
+    }
+    context.lineWidth = 10;
     circles.forEach(circle => {
       circle.draw(context);
       circle.move();
@@ -28,9 +46,13 @@ const sketch = () => {
   };
 };
 
+const getDistance = (x1, x2, y1, y2) => {
+  const a = x1 - x2;
+  const b = y1 - y2;
+  return Math.sqrt(a * a + b * b);
+}
+
 canvasSketch(sketch, settings);
-
-
 
 class Circle{
   constructor(x, y, radius){
@@ -45,6 +67,8 @@ class Circle{
     context.beginPath();
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     context.stroke();
+    context.fillStyle = 'white';
+    context.fill();
   }
 
   move(){
