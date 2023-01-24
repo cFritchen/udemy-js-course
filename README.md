@@ -4,7 +4,7 @@ progress through code art udemy course
 
 source: https://www.udemy.com/course/code-art or https://www.yetilearn.io/c/creative-coding
 
-#Project Links
+# Project Links
 
 1: https://cfritchen.github.io/udemy-js-course/1.JSParticles/index.html
 
