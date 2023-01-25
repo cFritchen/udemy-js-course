@@ -53,7 +53,7 @@
         let sprite = new THREE.TextureLoader().load("circle.png");
         let starMaterial = new THREE.PointsMaterial({
           color: "gray",
-          size: 0.6,
+          size: 1.0,
           map: sprite,
         });
         stars = new THREE.Points(starGeo, starMaterial);
